@@ -1,0 +1,55 @@
+# .jos — JOS Open Standards
+
+> `.jos` is a JSON format (RFC 8259) for declaring an intention: what is intended, when it is done, and what is to be avoided, with the metadata needed to identify, verify, compose and execute it. Media type `application/vnd.jos+json`. A document is data: parsing or validating it never runs anything; a kernel runs it after admission, inside its limits, and leaves receipts and a hash-chained ledger.
+
+This file is the entry point for an agent. Read it once, then act. Everything here was produced by running the published packages (@josfox/jos 6.0.1, @josfox/jos-core 2.1.0 JS and Python, foxctl 2.1.1, @josfox/jos-cli 2.0.0).
+
+## Load order
+1. This file (vocabulary, commands, exit codes, where things live).
+2. AGENTS.md (how to behave inside a .jos scope).
+3. The specification: https://github.com/josfox-jos/jos-spec — SPECIFICATION.md, then companions/{josid,ledger,capability,context-engine}, then tck/PROOF.md for what is proven.
+4. The document you are about to touch, its receipts (`jos runs`, `jos meter <run_>`) and its ledger (`jos ledger verify <run_>`).
+Never re-discover: read the ledgers, not the process list.
+
+## Vocabulary
+- intention: objective + success_criteria + guardrails.avoid. The minimum unit. An atom without success_criteria is a wish.
+- kinds: atom (one execution) · flow (steps with a needs DAG) · directory (a folder with .jos/manifest.jos) · template (execution.inputs slots, instantiated by use + with) · crystal (a sealed execution, served instead of re-running) · persona (behavioral contract) · engine (declares execution classes). A kind is inferred when absent.
+- guardrails.limit: seconds (exit 124) · output_bytes (137) · tokens (min 1) · cost_usd · retries · context_tokens (schema only in 2.1). In flows and folders the effective limit is the element-wise minimum of own, parent remaining, Capability.
+- security.permissions: engine:<class> · fs:read|write:<path> · net:none | net:egress:<host> · vault:read:<name> · storage:read|write:<seg> · clone:spawn|kill · shell:enable. A child never widens the parent.
+- Capability (cap_): nothing runs without one (K1). Local-trusted in 2.1; signed Capabilities are a later phase.
+- receipt: per step: criteria[{check, verdict, pass}], exit, duration_ms, input_hash, output_hash, inputs_hash, cache_hit/crystal when served. ledger: per run, JSON lines {seq, run, kind, ts, body, prev, hash}, kinds admit deny start receipt verify kill crystal end derive approval pal secret_read rel genesis; hash = sha256 of the JCS entry with hash ""; prev of seq 1 = sha256:000…0.
+- ids (JOSID): art_<sha256 of the canonical document, integrity.hash and .signature emptied> · ent_<uuid5 of "class:name"> (stable across versions) · run_ job_ cap_ clone_ apr_ usr_ org_ rt_ host_ prj_ (ULID, minted offline) · blob_ (bytes). integrity.hash = "sha256:" + the art_ hex.
+- crystal key: sha256(art_ ‖ canonical inputs ‖ ctx_class); a crystal is written only under --cache allow and never when the run read the vault.
+- scope: the nearest .jos/ upward. Nodes: root, projects/prj_*/, foxtails/<name>/. Indexed document dirs: root okrs flows templates tests process runbooks agents backplane; project okrs tasks process runbooks tests agents backplane; foxtail intentions gates runbooks backplane.
+- foxtail: a service as a folder: manifest.jos (kind directory, profiles foxtail/1 + projects/1, x-foxtail {name, version, ent, prj, kind, intentions[{id, ent, art}]}), intentions/, gates/ (gate id = <foxtail>.<stem>), scripts/, runbooks/, contracts/service.jos. Needs ⊆ installer grants.
+- ALAIA agent: a usr_ of class agent with an owner and a persona .jos/agents/<name>.jos (x-alaia: offers, needs, rubric{text, threshold}, exports). Engaged on a document of the scope under a job_; state from ledgers only; a step with "x-clone": true runs as a shadow clone (own clone_, run_, derived Capability, budget share, ledger <run_>/clones/<clone_>/ledger.jsonl).
+- secrets: a document names a secret only as "jos://vault/<name>" in execution.inputs with the permission vault:read:<name>; `jos run` opens the vault and the value reaches the step on stdin (`{"inputs":{"key":…}}`), never argv, stdout, a file or the ledger (the ledger records secret_read with the reference). Without an opener the run is code 5; with a locked vault code 3.
+
+## Exit codes
+0 done · 1 not done (a criterion failed) · 2 invalid document (also: duplicate keys, BOM, inexact numbers, unresolved slot, cycle) · 3 blocked (avoid matched, Capability denied, cwd outside the document's directory, integrity mismatch, locked vault, replay-only miss) · 4 budget not positive · 5 valid but unexecutable (unresolved use, engine not shell|jos, judge/json_schema criteria, tier sandbox, no vault opener, no PAL adapter) · 124 time limit · 137 output limit or kill · 64 usage.
+
+## Commands that matter (all verified)
+jos verify · jos init <name> · jos validate <file|folder> [--strict] · jos run <file|folder> [--input '{…}'] [--job job_] [--approve <step>] · jos runs · jos ledger verify <run_> · jos meter <run_> · jos ids <file>… · jos id derive <class:name> · jos graph <file> · jos migrate <0.0.7 doc>
+jos-core validate|run|graph|ids|hash|pal resolve|ledger verify|facts … (the kernel's own CLI, same in Python: `jos-core …`); run flags --dry-run --cache allow|deny|replay-only --crystals <dir> --input --with --job --graph
+Ecosystem: printf 'pw\n' | jos home new <eco>; export JOS_HOME=~/.jos-<eco>; jos secrets set|get|list; jos auth policy init; jos projects new <slug>; jos foxtail add|enable|check|ls; foxctl verify|list|run|preflight
+Agents: jos agents new <name> --owner usr_ · write <name> --with <json> [--next|--apply art_] · check <name> [--release] · engage <name> --offer <path of a scope document> [--budget-usd n] · observe job_ · release job_ · export <name> --to claude-code|codex|antigravity|grok
+Serve: jos serve --mcp (stdio MCP: list_files read_file search_files read_markdown run_document …; no shell tool) · jos serve --http [--mcp] (screens, /.well-known/agent.json, POST /a2a/tasks/send, GET /a2a/tasks/get) · jos-cli hub add|signup|login|send|get · jos-cli mcp --hub <name>
+
+## Rules that trip agents
+- Pass every input in --input; execution.inputs defaults are not applied at run time.
+- An inline shell step (`run`) takes no env or success_criteria; a step that needs its own criteria, limits, permissions or env is an inline document (jos + meta …).
+- A step's cwd is its own directory: gate scripts reach the folder with ../.
+- --offer is a file path (absolute or scope-relative) of a document the scope indexes, not an id.
+- Shadow clones run in the JS kernel only; the Python kernel runs the step inline.
+- Caching is opt-in: without --cache allow nothing is sealed.
+- engine llm/judge/function/human and criterion judge are valid but code 5 in 2.1. Judging today happens in foxtail scripts.
+- A scope needs an owner of class person (genesis/registries/owners.json) before agents or foxtails; `jos serve` needs auth/policy.jos.
+- The README says 2.1.1; that is the toolset release train. The format is 2.0.0 (spec); jos-core is 2.1.0; @josfox/jos is 6.0.1.
+
+## Where things live
+~/.jos/ or ~/.jos-<eco>/: genesis/registries/owners.json (usr_ host_ rt_), vault/envelope.jos, auth/{shadow,policy,runtime}.jos, runs/<run_>/ledger.jsonl, crystals/
+<scope>/.jos/: manifest.jos, auth/policy.jos, genesis/registries/*.json + graph.jsonl, flows/ tests/ process/ runbooks/ agents/ (+ agents/versions/), projects/<prj_>/, foxtails/<name>/, replays/<run_>/ (+ clones/<clone_>/), crystals/, journal/, docs/, orgs/
+Excluded from a directory hash: logs/, replays/, dev/, ai/cache.
+
+## Links
+Specification https://github.com/josfox-jos/jos-spec · this repository https://github.com/josfox-jos/jos · npm https://www.npmjs.com/package/@josfox/jos https://www.npmjs.com/package/@josfox/jos-core · PyPI https://pypi.org/project/jos-core/ · VS Code https://marketplace.visualstudio.com/items?itemName=JOSFOX.josfox-jos · history https://github.com/josfox-ai/jos-format-spec
