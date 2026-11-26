@@ -2,8 +2,8 @@
 """Example 01: Real-Time Voice Payment Guardrail (< 2 µs per step, < 200 ms turn budget).
 
 Demonstrates capability monotonicity Caps(child) <= Caps(invoker) and cryptographic
-ledger chaining: approves a valid $350 MXN transfer in ~1.6 µs and blocks an LLM
-hallucinated privilege-escalation attempt ('payments:wire:unlimited') before execution.
+ledger chaining: approves a valid transfer in microseconds and blocks an LLM
+privilege-escalation attempt ('payments:wire:unlimited') before execution.
 """
 from __future__ import annotations
 import hashlib, json, time
@@ -12,11 +12,18 @@ INVOKER_CAPS = {"payments:transfer:max_500", "contacts:read"}
 
 
 def jcs(obj) -> str:
-    if obj is None or isinstance(obj, (bool, int, float, str)):
+    if obj is None:
+        return "null"
+    if isinstance(obj, bool):
+        return "true" if obj else "false"
+    if isinstance(obj, (int, float)):
+        return json.dumps(obj)
+    if isinstance(obj, str):
         return json.dumps(obj, ensure_ascii=False)
     if isinstance(obj, list):
         return "[" + ",".join(jcs(x) for x in obj) + "]"
-    return "{" + ",".join(f"{json.dumps(k)}:{jcs(obj[k])}" for k in sorted(obj)) + "}"
+    keys = sorted(obj.keys(), key=lambda s: s.encode("utf-16-be"))
+    return "{" + ",".join(f"{json.dumps(k, ensure_ascii=False)}:{jcs(obj[k])}" for k in keys) + "}"
 
 
 def verify_and_seal_step(step_name: str, requested_caps: set[str], payload: dict, prev_art: str) -> dict:
