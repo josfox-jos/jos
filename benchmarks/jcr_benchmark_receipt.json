@@ -1,0 +1,38 @@
+{
+  "benchmark": "JOS-2.2.0-JCR-POLYGLOT-SUITE",
+  "timestamp_utc": "2026-11-26T12:41:39Z",
+  "host": {
+    "os": "Darwin",
+    "arch": "arm64",
+    "python": "3.12.7"
+  },
+  "experiment_1_cross_language_parity": {
+    "all_5_identical": true,
+    "artifacts": {
+      "c99_firmware": "art_3b5951d392e00c3f3d91bc4a6525fb5dde59a4a78de7cd9ab6c0cc992c52c05a",
+      "rust": "art_3b5951d392e00c3f3d91bc4a6525fb5dde59a4a78de7cd9ab6c0cc992c52c05a",
+      "go": "art_3b5951d392e00c3f3d91bc4a6525fb5dde59a4a78de7cd9ab6c0cc992c52c05a",
+      "python": "art_3b5951d392e00c3f3d91bc4a6525fb5dde59a4a78de7cd9ab6c0cc992c52c05a",
+      "javascript": "art_3b5951d392e00c3f3d91bc4a6525fb5dde59a4a78de7cd9ab6c0cc992c52c05a"
+    },
+    "chained_1000_final_art": "art_054ca939ec32fc5b1c6cb4a3d16870a7b0cb2a1486606e89f726e5562b6668c1"
+  },
+  "experiment_2_1000_chained_voice_steps_budget_200ms": {
+    "c99_zero_heap_firmware_ms": 1.146,
+    "python_ctypes_libjos_ffi_ms": 1.664,
+    "go_native_inmem_ms": 3.915,
+    "rust_native_ast_ms": 6.633,
+    "python_pure_inmem_ms": 15.282,
+    "cli_subprocess_projected_ms": 4693.7,
+    "c99_voice_budget_pct": 0.57,
+    "firmware_stack_bytes": 5504,
+    "firmware_heap_allocs": 0
+  },
+  "experiment_3_crystallization_flywheel": {
+    "krmen_7device_cold_compile_us": 74.02,
+    "warm_crystal_replay_us": 0.014,
+    "warm_vs_cold_speedup_x": 5417.9,
+    "warm_llm_tokens": 0,
+    "warm_api_cost_usd": 0.0
+  }
+}
