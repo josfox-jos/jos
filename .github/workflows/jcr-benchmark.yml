@@ -1,0 +1,48 @@
+name: JCR Multi-Architecture Benchmark Suite (.jos 2.5.0)
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'benchmarks/**'
+      - '.github/workflows/jcr-benchmark.yml'
+
+jobs:
+  benchmark:
+    name: Bench (${{ matrix.label }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            label: linux-x86_64-epyc
+          - os: ubuntu-24.04-arm
+            label: linux-arm64-cobalt
+          - os: macos-14
+            label: macos-arm64-m1
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: '1.22'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Rustc if missing
+        run: |
+          if ! command -v rustc >/dev/null 2>&1; then
+            curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --profile minimal
+            echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+          fi
+      - name: Run JCR 5-Language 1,000-Step Benchmark
+        run: |
+          python3 benchmarks/run_jcr_suite.py
+      - name: Upload Hardware Receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: jcr-receipt-${{ matrix.label }}
+          path: benchmarks/jcr_receipt_*.json

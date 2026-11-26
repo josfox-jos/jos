@@ -1,4 +1,4 @@
-# `.jos` 2.2 Polyglot Architecture, Native `libjos` FFI & Benchmark Specification
+# `.jos` 2.5.0 Polyglot Architecture, Native `libjos` FFI & Multi-Architecture Benchmark Specification
 
 **Status:** Public Reference Note · **Date:** 2026-11-26 · **License:** CC BY 4.0 (text) / Apache-2.0 (code)  
 **Repositories:** [`josfox-jos/jos`](https://github.com/josfox-jos/jos) · [`josfox-jos/jos-spec`](https://github.com/josfox-jos/jos-spec) · [`josfox-jos/libjos`](https://github.com/josfox-jos/libjos) · [`josfox-jos/jos-go`](https://github.com/josfox-jos/jos-go)
@@ -66,17 +66,17 @@ Reporting that in-memory C99/Rust FFI sealing takes **`1.80 µs`** instead of **
 | :--- | :--- | :--- |
 | **JavaScript / TypeScript (npm)** | [`@josfox/jos`](https://www.npmjs.com/package/@josfox/jos) · [`@josfox/jos-core`](https://www.npmjs.com/package/@josfox/jos-core) · [`foxtana`](https://www.npmjs.com/package/foxtana) · [`krmen`](https://www.npmjs.com/package/krmen) · [`alaia`](https://www.npmjs.com/package/alaia) · [`athena-jos`](https://www.npmjs.com/package/athena-jos) | `npm install @josfox/jos krmen alaia foxtana` |
 | **Python (PyPI)** | [`jos-core`](https://pypi.org/project/jos-core/) · [`dotjos`](https://pypi.org/project/dotjos/) (`jos-py`) · [`josctl`](https://pypi.org/project/josctl/) · [`foxtana`](https://pypi.org/project/foxtana/) · [`josfox`](https://pypi.org/project/josfox/) | `pip install jos-core dotjos josctl foxtana` |
-| **Go (`pkg.go.dev`)** | [`josfox.cloud/jos`](https://pkg.go.dev/josfox.cloud/jos) · [`josfox.cloud/foxtana`](https://pkg.go.dev/josfox.cloud/foxtana) · [`josfox.cloud/krmen`](https://pkg.go.dev/josfox.cloud/krmen) · [`josfox.cloud/alaia`](https://pkg.go.dev/josfox.cloud/alaia) | `go get josfox.cloud/jos@v0.1.1` |
+| **Go (`pkg.go.dev`)** | [`josfox.cloud/jos`](https://pkg.go.dev/josfox.cloud/jos) · [`josfox.cloud/foxtana`](https://pkg.go.dev/josfox.cloud/foxtana) · [`josfox.cloud/krmen`](https://pkg.go.dev/josfox.cloud/krmen) · [`josfox.cloud/alaia`](https://pkg.go.dev/josfox.cloud/alaia) | `go get josfox.cloud/jos@v0.1.2` |
 | **C99 / CMake / SwiftPM** | [`josfox-jos/libjos`](https://github.com/josfox-jos/libjos) (`CLibJos` & `JosSwift`) | `.package(url: "https://github.com/josfox-jos/libjos", from: "0.1.0")` |
 
-### Direct Standalone Binaries (`v2.2.0` Release Assets)
-All static zero-dependency binaries and `SHA256SUMS.txt` are published at **[GitHub Release `v2.2.0`](https://github.com/josfox-jos/jos/releases/tag/v2.2.0)**:
-- macOS Apple Silicon (`arm64`): [`jos-darwin-arm64`](https://github.com/josfox-jos/jos/releases/download/v2.2.0/jos-darwin-arm64) · [`foxtana-darwin-arm64`](https://github.com/josfox-jos/jos/releases/download/v2.2.0/foxtana-darwin-arm64)
-- macOS Intel (`amd64`): [`jos-darwin-amd64`](https://github.com/josfox-jos/jos/releases/download/v2.2.0/jos-darwin-amd64)
-- Linux (`x86_64` & `arm64`): [`jos-linux-amd64`](https://github.com/josfox-jos/jos/releases/download/v2.2.0/jos-linux-amd64) · [`jos-linux-arm64`](https://github.com/josfox-jos/jos/releases/download/v2.2.0/jos-linux-arm64) · [`foxtana-linux-amd64`](https://github.com/josfox-jos/jos/releases/download/v2.2.0/foxtana-linux-amd64)
-- Windows (`x86_64`): [`jos-windows-amd64.exe`](https://github.com/josfox-jos/jos/releases/download/v2.2.0/jos-windows-amd64.exe) · [`foxtana-windows-amd64.exe`](https://github.com/josfox-jos/jos/releases/download/v2.2.0/foxtana-windows-amd64.exe)
-- C99 / CMake / SwiftPM Source Tarball: [`libjos-0.1.0-c99-swiftpm.tar.gz`](https://github.com/josfox-jos/jos/releases/download/v2.2.0/libjos-0.1.0-c99-swiftpm.tar.gz)
-- Checksums: [`SHA256SUMS.txt`](https://github.com/josfox-jos/jos/releases/download/v2.2.0/SHA256SUMS.txt)
+### Direct Standalone Binaries (`v2.5.0` Release Assets)
+All static zero-dependency binaries and `SHA256SUMS.txt` are published at **[GitHub Release `v2.5.0`](https://github.com/josfox-jos/jos/releases/tag/v2.5.0)**:
+- macOS Apple Silicon (`arm64`): [`jos-darwin-arm64`](https://github.com/josfox-jos/jos/releases/download/v2.5.0/jos-darwin-arm64) · [`foxtana-darwin-arm64`](https://github.com/josfox-jos/jos/releases/download/v2.5.0/foxtana-darwin-arm64)
+- macOS Intel (`amd64`): [`jos-darwin-amd64`](https://github.com/josfox-jos/jos/releases/download/v2.5.0/jos-darwin-amd64)
+- Linux (`x86_64` & `arm64`): [`jos-linux-amd64`](https://github.com/josfox-jos/jos/releases/download/v2.5.0/jos-linux-amd64) · [`jos-linux-arm64`](https://github.com/josfox-jos/jos/releases/download/v2.5.0/jos-linux-arm64) · [`foxtana-linux-amd64`](https://github.com/josfox-jos/jos/releases/download/v2.5.0/foxtana-linux-amd64)
+- Windows (`x86_64`): [`jos-windows-amd64.exe`](https://github.com/josfox-jos/jos/releases/download/v2.5.0/jos-windows-amd64.exe) · [`foxtana-windows-amd64.exe`](https://github.com/josfox-jos/jos/releases/download/v2.5.0/foxtana-windows-amd64.exe)
+- C99 / CMake / SwiftPM Source Tarball: [`libjos-0.1.0-c99-swiftpm.tar.gz`](https://github.com/josfox-jos/jos/releases/download/v2.5.0/libjos-0.1.0-c99-swiftpm.tar.gz)
+- Checksums: [`SHA256SUMS.txt`](https://github.com/josfox-jos/jos/releases/download/v2.5.0/SHA256SUMS.txt)
 
 ```text
 e3944398decb121e3ab610eea7147d8a64cb5a72f4e85340c4294ce82f6f4f36  jos-darwin-amd64
