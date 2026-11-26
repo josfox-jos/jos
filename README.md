@@ -220,9 +220,14 @@ Measured on the published packages, 2026-11-05. Honest by design: the specificat
 | [josfox](https://www.npmjs.com/package/josfox) | Where a person starts: `josfox kickoff` lists your `.jos` scopes and published adapters. 2.1.1 | `npm install -g josfox` |
 | [foxctl](https://www.npmjs.com/package/foxctl) · [@josfox/foxctl](https://www.npmjs.com/package/@josfox/foxctl) | Services CLI: find, check and run the `.jos` documents of a service. 2.1.1 | `npm install -g foxctl` |
 | [foxjos](https://www.npmjs.com/package/foxjos) | npx runner for `@josfox/jos`. 0.2.1 | `npx foxjos` |
+| [foxtana](https://www.npmjs.com/package/foxtana) · [krmen](https://www.npmjs.com/package/krmen) · [alaia](https://www.npmjs.com/package/alaia) · [athena-jos](https://www.npmjs.com/package/athena-jos) | Coordinator (`Paso Cero`, `AthenaGate`), 7-device declarative UI compiler (`KRMEN`), and multi-agent Swarm DAG orchestrator (`ALAIA`) on npm. 0.1.0 | `npm install foxtana krmen alaia` |
+| [dotjos](https://pypi.org/project/dotjos/) · [josctl](https://pypi.org/project/josctl/) · [foxtana](https://pypi.org/project/foxtana/) | In-memory Python SDK (`jos-py` + optional `libjos` C99 FFI), desired-state controller and `FOXTANA` coordinator on PyPI. 0.1.0 | `pip install dotjos josctl foxtana` |
+| [josfox.cloud/jos](https://pkg.go.dev/josfox.cloud/jos) · [/foxtana](https://pkg.go.dev/josfox.cloud/foxtana) · [/krmen](https://pkg.go.dev/josfox.cloud/krmen) · [/alaia](https://pkg.go.dev/josfox.cloud/alaia) | Zero-dependency Go modules: RFC 8785 JCS + `art_<sha256>` sealing (`2.50 µs`), `KRMEN`, `ALAIA` and `FOXTANA`. 0.1.1 / 0.1.0 | `go get josfox.cloud/jos@v0.1.1` |
+| [libjos](https://github.com/josfox-jos/libjos) (`CLibJos` · `JosSwift`) | Portable C99 reference library + CMake + Swift Package Manager (`macOS`, `iOS`, `visionOS`, `Linux`, `Windows`), `1.80 µs` stack-buffer sealing. 0.1.0 | `https://github.com/josfox-jos/libjos` |
+| [Standalone binaries (`v2.2.0`)](https://github.com/josfox-jos/jos/releases/tag/v2.2.0) | Static zero-dependency `jos` and `foxtana` binaries for macOS (`arm64`/`amd64`), Linux (`amd64`/`arm64`) and Windows (`amd64`), with `SHA256SUMS.txt`. 2.2.0 | [GitHub Releases](https://github.com/josfox-jos/jos/releases/tag/v2.2.0) |
 | [VS Code extension](https://marketplace.visualstudio.com/items?itemName=JOSFOX.josfox-jos) | `.jos` for VS Code, Cursor, Windsurf and Antigravity: schema validation and the jos console. 2.1.0 | Visual Studio Marketplace |
 
-Every tool embeds `hello.jos`, so the first run is one command.
+Every tool embeds `hello.jos`, so the first run is one command. See [`docs/POLYGLOT_ARCHITECTURE_AND_BENCHMARKS.md`](docs/POLYGLOT_ARCHITECTURE_AND_BENCHMARKS.md) for the polyglot runtime architecture and reproducible microsecond benchmarks.
 
 ## For agents
 
@@ -232,6 +237,7 @@ Load, in this order: [`llms.txt`](llms.txt) (vocabulary, commands, exit codes, w
 
 | Version | Date | What changed |
 |---|---|---|
+| [2.2.0](https://github.com/josfox-jos/jos/releases/tag/v2.2.0) | 2026-11-26 | Polyglot native SDKs across Go ([`josfox.cloud/jos`](https://pkg.go.dev/josfox.cloud/jos), `/foxtana`, `/krmen`, `/alaia`), C99/CMake/SwiftPM ([`libjos`](https://github.com/josfox-jos/libjos)), Python (`dotjos`, `josctl`, `foxtana`) and npm (`foxtana`, `krmen`, `alaia`, `athena-jos`); cross-platform static binaries + [`docs/POLYGLOT_ARCHITECTURE_AND_BENCHMARKS.md`](docs/POLYGLOT_ARCHITECTURE_AND_BENCHMARKS.md) (`1.80 µs` C99 FFI, `2.50 µs` Go, `6.49 µs` Rust, `70.06 µs` 7-device `KRMEN` compile). |
 | 2.1.1 | 2026-11-04 | `josctl` answers clearly when a kernel has no catalog; Apache-2.0 and working links on every package; `@josfox/jos` 6.0.1. |
 | 2.1.0 | 2026-10-30 | `jos-core` 2.1.0 on npm and PyPI, `@josfox/jos` 6.0.0, `@josfox/jos-cli` 2.0.0, `josctl`, `josfox` and `foxctl` 2.1.0, VS Code extension 2.1.0. |
 | 2.0.0 | 2026-10-22 (spec) · 2026-10-23 (`jos-core` 2.0.0 on npm) | The 2.0.0 specification, an additive superset of 1.0.0; `jos-core` 2.0.0. |
@@ -262,6 +268,8 @@ Jos
 - [jos-format-spec: the 0.0.7 draft that started it](https://github.com/josfox-ai/jos-format-spec) — kept for history and for reading old documents.
 - [A2A.jos: Agent2Agent protocol fork for carrying `.jos` contracts](https://github.com/josfox-ai/A2A.jos) — where `.jos` meets agent-to-agent transport.
 - [.jos-a2a-js: A2A JavaScript SDK fork for `.jos` interoperability](https://github.com/josfox-ai/.jos-a2a-js) — the JavaScript side of that work.
+- [libjos: portable C99 reference library, CMake and SwiftPM (`CLibJos` / `JosSwift`)](https://github.com/josfox-jos/libjos) — native sub-2 µs RFC 8785 JCS + `art_<sha256>` sealing for C, C++, Swift, Python FFI and embedded runtimes.
+- [jos-go](https://github.com/josfox-jos/jos-go) · [foxtana-go](https://github.com/josfox-jos/foxtana-go) · [krmen-go](https://github.com/josfox-jos/krmen-go) · [alaia-go](https://github.com/josfox-jos/alaia-go) — zero-dependency Go modules indexed at [`pkg.go.dev/josfox.cloud/...`](https://pkg.go.dev/josfox.cloud/jos).
 
 **Built by JOSFOX**
 - [josfoxai-deep-link: open the JOSFOX AI app from any web page](https://github.com/josfox-ai/josfoxai-deep-link) — a JOSFOX product utility.
